@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Web Tech Project Choices</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta author="CHENGKANG">
+		<meta website="http://chengkang.me">
+		<link rel="stylesheet" type="text/css" href="./css/style.css">
+		<style type="text/css">
+		</style>
+	</head>
+	<body>
+		<div id="containner" class="content">
+			<article>
+				<header>
+					<h1 class="posttitle" itemprop="name headline">
+					Web Technology Project Choices
+					</h1>
+				</header>
+			</article>
+			<div id="aside" class="content">
+				
+			</div>
+		</div>
+		<script type="text/javascript" src="./js/xlsx.core.min.js"></script>
+		<script type="text/javascript">
+			/* set up XMLHttpRequest */
+			var url = "./files/wtpc.xlsx";
+			var oReq = new XMLHttpRequest();
+			oReq.open("GET", url, true);
+			oReq.responseType = "arraybuffer";
+			oReq.onload = function(e) {
+			    var arraybuffer = oReq.response;
+			    /* convert data to binary string */
+			    var data = new Uint8Array(arraybuffer);
+			    var arr = new Array();
+			    for (var i = 0; i != data.length; ++i) arr[i] = String.fromCharCode(data[i]);
+			    var bstr = arr.join("");
+			    /* Call XLSX */
+			    var choices = XLSX.read(bstr, {
+			        type: "binary"
+			    });
+			    var sheet = choices.Sheets['Sheet1'];
+			    for (var i = 1; i <= 49; i++) {
+			        var code = sheet["A" + i].v;
+			        var title = sheet["B" + i].v;
+			        var supervisor = sheet["D" + i].v;
+			        var email = sheet["C" + i].v + "@ecs.soton.ac.uk";
+			        var desc = sheet["E" + i].v;
+			        var keywords = (`$ {
+			            sheet["F" + i].v
+			        }`).split(``);
+			        var kString = "";
+			        for (var j = 0; j < keywords.length; j++) {
+			            kString += "<code>" + keywords[j] + "<\/code>"
+			        }
+			        var strVar = "";
+			        strVar += "<article id=\"" + code + "\">";
+			        strVar += "<div class=\"content\">";
+			        strVar += "<h1>#" + code + " " + title + "<\/h1>";
+			        strVar += "";
+			        strVar += "<blockquote>";
+			        strVar += "<p>Supervisor: " + supervisor + "<\/p>";
+			        strVar += "";
+			        strVar += "<p>Email: <a href=\"mailto:" + email + "\">" + email + "<\/a><\/p>";
+			        strVar += "<\/blockquote>";
+			        strVar += "";
+			        strVar += "<h2>Keywords:<\/h2>";
+			        strVar += "";
+			        strVar += "<p>" + kString + "<\/p>";
+			        strVar += "";
+			        strVar += "<h2>Description<\/h2>";
+			        strVar += "";
+			        strVar += "<p>" + desc + "<\/p>";
+			        strVar += "";
+			        strVar += "<\/div>";
+			        strVar += "<\/article>";
+			        document.getElementById("containner").innerHTML += strVar;
+			        document.getElementById("aside").innerHTML += "<p class=\"aside-links\">" + "#" + code + " <a href=\"#" + code + "\">" + title + "<\/a><\/p>";
+			    }
+			}
+			oReq.send();
+		</script>
+	</body>
+</html>
