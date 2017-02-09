@@ -48,9 +48,8 @@
 			        var supervisor = sheet["D" + i].v;
 			        var email = sheet["C" + i].v + "@ecs.soton.ac.uk";
 			        var desc = sheet["E" + i].v;
-			        var keywords = (`$ {
-			            sheet["F" + i].v
-			        }`).split(``);
+			        var keywords = (`${sheet["F" + i].v}`).split(`
+`);
 			        var kString = "";
 			        for (var j = 0; j < keywords.length; j++) {
 			            kString += "<code>" + keywords[j] + "<\/code>"
